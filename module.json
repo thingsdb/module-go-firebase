@@ -1,0 +1,35 @@
+{
+    "doc": "https://github.com/thingsdb/module-go-firebase#readme",
+    "version": "0.1.0",
+    "main": {
+        "linux/386": "bin/firebase_linux_386.bin",
+        "linux/amd64": "bin/firebase_linux_amd64.bin",
+        "linux/arm": "bin/firebase_linux_arm.bin",
+        "linux/arm64": "bin/firebase_linux_arm64.bin",
+        "freebsd/386": "bin/firebase_freebsd_386.bin",
+        "freebsd/amd64": "bin/firebase_freebsd_amd64.bin",
+        "freebsd/arm": "bin/firebase_freebsd_arm.bin",
+        "freebsd/arm64": "bin/firebase_freebsd_arm64.bin",
+        "darwin/amd64": "bin/firebase_darwin_amd64.bin"
+    },
+    "exposes": {
+        "new_ticket": {
+            "doc": "Sends a Message to Firebase Cloud Messaging.",
+            "defaults": {
+                "handler": "send-message",
+                "deep": 0,
+                "load": true
+            },
+            "argmap": ["body", "data", "title", "token"]
+        },
+        "get_ticket": {
+            "doc": "Sends a multicast message to all the FCM registration tokens",
+            "defaults": {
+                "handler": "send-multicast-message",
+                "deep": 0,
+                "load": true
+            },
+            "argmap": ["body", "data", "title", "tokens"]
+        }
+    }
+}
