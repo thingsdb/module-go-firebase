@@ -7,6 +7,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"sync"
@@ -23,7 +24,7 @@ var app *firebase.App
 var client *messaging.Client
 
 type firebaseConf struct {
-	Credentials []byte `msgpack:"credentials"`
+	Credentials map[string]string `msgpack:"credentials"`
 }
 
 type firebaseReq struct {
@@ -49,9 +50,13 @@ func handleConf(conf *firebaseConf) error {
 		return fmt.Errorf("Firebase credentials must not be empty")
 	}
 
-	opt := option.WithCredentialsJSON(conf.Credentials)
+	json, err := json.Marshal(conf.Credentials)
+	if err != nil {
+		return err
+	}
 
-	var err error
+	opt := option.WithCredentialsJSON(json)
+
 	ctx := context.Background()
 
 	//Firebase admin SDK initialization
@@ -162,7 +167,7 @@ func handler(buf *timod.Buffer, quit chan bool) {
 
 				err := msgpack.Unmarshal(pkg.Data, &conf)
 				if err != nil {
-					log.Println("Missing or invalid SMTP configuration")
+					log.Println("Missing or invalid Firebase configuration")
 					timod.WriteConfErr()
 					break
 				}
