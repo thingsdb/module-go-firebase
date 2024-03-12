@@ -19,7 +19,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-var mux sync.Mutex
+var mux sync.RWMutex
 var app *firebase.App
 var client *messaging.Client
 
@@ -46,6 +46,9 @@ type multicastMessage struct {
 }
 
 func handleConf(conf *firebaseConf) error {
+	mux.RLock()
+	defer mux.RUnlock()
+
 	if conf.Credentials == nil {
 		return fmt.Errorf("Firebase credentials must not be empty")
 	}
@@ -74,11 +77,16 @@ func handleConf(conf *firebaseConf) error {
 	return nil
 }
 
-func handleSendMessage(pkg *timod.Pkg) error {
+func handleSendMessage(pkg *timod.Pkg) {
 	var req message
 	err := msgpack.Unmarshal(pkg.Data, &req)
 	if err != nil {
-		return fmt.Errorf("Failed to unpack Firebase request (%s)", err)
+		log.Printf("Failed to unpack Firebase request (%s)", err)
+		timod.WriteEx(
+			pkg.Pid,
+			timod.ExBadData,
+			"Failed to unpack Firebase request")
+		return
 	}
 
 	message := &messaging.Message{
@@ -94,17 +102,24 @@ func handleSendMessage(pkg *timod.Pkg) error {
 	// registration token.
 	_, err = client.Send(context.Background(), message)
 	if err != nil {
-		return err
+		log.Printf("Failed to send multicast message (%s)", err)
+		timod.WriteEx(
+			pkg.Pid,
+			timod.ExBadData,
+			"Failed to send multicast message")
 	}
-
-	return nil
 }
 
-func handleSendMulticastMessage(pkg *timod.Pkg) error {
+func handleSendMulticastMessage(pkg *timod.Pkg) {
 	var req multicastMessage
 	err := msgpack.Unmarshal(pkg.Data, &req)
 	if err != nil {
-		return fmt.Errorf("Failed to unpack Firebase request (%s)", err)
+		log.Printf("Failed to unpack Firebase request (%s)", err)
+		timod.WriteEx(
+			pkg.Pid,
+			timod.ExBadData,
+			"Failed to unpack Firebase request")
+		return
 	}
 
 	message := &messaging.MulticastMessage{
@@ -118,13 +133,18 @@ func handleSendMulticastMessage(pkg *timod.Pkg) error {
 
 	_, err = client.SendMulticast(context.Background(), message)
 	if err != nil {
-		return err
+		log.Printf("Failed to send multicast message (%s)", err)
+		timod.WriteEx(
+			pkg.Pid,
+			timod.ExBadData,
+			"Failed to send multicast message")
 	}
-
-	return nil
 }
 
 func onModuleReq(pkg *timod.Pkg) {
+	mux.RLock()
+	defer mux.RUnlock()
+
 	var req firebaseReq
 	err := msgpack.Unmarshal(pkg.Data, &req)
 	if err != nil {
