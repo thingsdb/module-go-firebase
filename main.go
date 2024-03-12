@@ -102,11 +102,11 @@ func handleSendMessage(pkg *timod.Pkg) {
 	// registration token.
 	_, err = client.Send(context.Background(), message)
 	if err != nil {
-		log.Printf("Failed to send multicast message (%s)", err)
+		log.Printf("Failed to send message (%s)", err)
 		timod.WriteEx(
 			pkg.Pid,
 			timod.ExBadData,
-			"Failed to send multicast message")
+			"Failed to send message")
 	}
 }
 
