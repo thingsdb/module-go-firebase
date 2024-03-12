@@ -13,7 +13,7 @@
         "darwin/amd64": "bin/firebase_darwin_amd64.bin"
     },
     "exposes": {
-        "new_ticket": {
+        "send_message": {
             "doc": "Sends a Message to Firebase Cloud Messaging.",
             "defaults": {
                 "handler": "send-message",
@@ -22,7 +22,7 @@
             },
             "argmap": ["body", "data", "title", "token"]
         },
-        "get_ticket": {
+        "send_multicast_message": {
             "doc": "Sends a multicast message to all the FCM registration tokens",
             "defaults": {
                 "handler": "send-multicast-message",
