@@ -17,33 +17,92 @@ Optionally, you can choose a specific version by adding a `@` followed with the 
 
 The firebase module requires configuration with the following properties:
 
-Property | Type            | Description
--------- | --------------- | -----------
-
-
+Property    | Type            | Description
+----------- | --------------- | -----------
+credentials | str (required)  | A service account or refresh token JSON credentials.
 
 Example configuration:
 
 ```javascript
 set_module_conf("firebase", {
+    credentials: json_load('<paste json here>')
 });
 ```
 
 ## Exposed functions
 
-Name                            | Description
-------------------------------- | -----------
+Name                                              | Description
+------------------------------------------------- | -----------
+[send_message](#send-message)                     | Send a message to one registration token
+[send_multicast_message](#send-multicast-message) | Send a message to multiple registration tokens
 
-### XXX
+### Send message
 
-Syntax: `xxx_xxx(xx, xx)`
+Syntax: `send_message(body, data, title, token)`
 
 #### Arguments
 
-- `xx`: _(thing)_ xxx.
+- `body`: _(str)_ Body of the message.
+- `data`: _(thing)_ Collection of key-value pairs that will be added to the message as data fields..
+- `title`: _(str)_ Title of the message.
+- `token`: _(str)_ The registration token of the device to which the message should be sent.
 
 #### Example:
 
 ```javascript
+body = "Message body.";
+data = {
+    key: "value"
+};
+title = "Message title";
+token = "<paste token here>";
 
+// Send a notification
+firebase.send_message(
+    body,
+    data,
+    title,
+    token
+).then(|res| {
+    res;  // response as "mpdata"
+}).else(|err| {
+    err;
+});
+```
+
+### Send multicast message
+
+Syntax: `send_multicast_message(body, data, title, tokens)`
+
+#### Arguments
+
+- `body`: _(str)_ Body of the message.
+- `data`: _(thing)_ Collection of key-value pairs that will be added to the message as data fields..
+- `title`: _(str)_ Title of the message.
+- `tokens`: _(str)_ The registration tokens for the devices to which the message should be distributed.
+
+#### Example:
+
+```javascript
+body = "Message body.";
+data = {
+    key: "value"
+};
+title = "Message title";
+tokens = [
+    '<paste token 1 here>',
+    '<paste token 2 here>',
+];
+
+// Send a notification to multiple registration tokens
+firebase.send_multicast_message(
+    body,
+    data,
+    title,
+    tokens
+).then(|res| {
+    res;  // response as "mpdata"
+}).else(|err| {
+    err;
+});
 ```
