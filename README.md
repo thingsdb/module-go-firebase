@@ -17,13 +17,14 @@ Optionally, you can choose a specific version by adding a `@` followed with the 
 
 The firebase module requires configuration with the following properties:
 
-Property    | Type            | Description
------------ | --------------- | -----------
-credentials | str (required)  | A service account or refresh token JSON credentials.
+Property    | Type             | Description
+----------- | ---------------- | -----------
+credentials | thing (required) | A service account or refresh token JSON credentials.
 
 Example configuration:
 
 ```javascript
+// Note: We used 'json_load()' to convert a JSON string into ThingsDB value.
 set_module_conf("firebase", {
     credentials: json_load('<paste json here>')
 });
