@@ -138,7 +138,7 @@ func handleSendMulticastMessage(pkg *timod.Pkg) {
 			fmt.Sprintf("Failed to send multicast message (%s)", err))
 	}
 
-	timod.WriteResponse(pkg.Pid, br.Responses)
+	timod.WriteResponse(pkg.Pid, br)
 }
 
 func onModuleReq(pkg *timod.Pkg) {

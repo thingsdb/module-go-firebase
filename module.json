@@ -18,7 +18,7 @@
             "defaults": {
                 "handler": "send-message",
                 "deep": 0,
-                "load": true
+                "load": false
             },
             "argmap": ["body", "data", "title", "token"]
         },
@@ -27,7 +27,7 @@
             "defaults": {
                 "handler": "send-multicast-message",
                 "deep": 0,
-                "load": true
+                "load": false
             },
             "argmap": ["body", "data", "title", "tokens"]
         }
