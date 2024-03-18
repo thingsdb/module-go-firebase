@@ -14,10 +14,10 @@
     },
     "exposes": {
         "send_message": {
-            "doc": "Sends a Message to Firebase Cloud Messaging.",
+            "doc": "Sends a message to Firebase Cloud Messaging.",
             "defaults": {
                 "handler": "send-message",
-                "deep": 0,
+                "deep": 1,
                 "load": false
             },
             "argmap": ["body", "data", "title", "token"]
@@ -26,7 +26,7 @@
             "doc": "Sends a multicast message to all the FCM registration tokens",
             "defaults": {
                 "handler": "send-multicast-message",
-                "deep": 0,
+                "deep": 1,
                 "load": false
             },
             "argmap": ["body", "data", "title", "tokens"]
