@@ -105,6 +105,7 @@ func handleSendMessage(pkg *timod.Pkg) {
 			pkg.Pid,
 			timod.ExBadData,
 			fmt.Sprintf("Failed to send message (%s)", err))
+		return
 	}
 
 	timod.WriteResponse(pkg.Pid, resp)
@@ -136,6 +137,7 @@ func handleSendMulticastMessage(pkg *timod.Pkg) {
 			pkg.Pid,
 			timod.ExBadData,
 			fmt.Sprintf("Failed to send multicast message (%s)", err))
+		return
 	}
 
 	timod.WriteResponse(pkg.Pid, br)
@@ -158,24 +160,34 @@ func onModuleReq(pkg *timod.Pkg) {
 
 	if *req.Handler == "send-message" {
 		handleSendMessage(pkg)
-	} else if req.Handler == nil {
-		timod.WriteEx(
-			pkg.Pid,
-			timod.ExBadData,
-			"Missing handler")
-	} else if *req.Handler == "send-multicast-message" {
-		handleSendMulticastMessage(pkg)
-	} else if req.Handler == nil {
-		timod.WriteEx(
-			pkg.Pid,
-			timod.ExBadData,
-			"Missing handler")
-	} else {
-		timod.WriteEx(
-			pkg.Pid,
-			timod.ExBadData,
-			fmt.Sprintf("Unknown handler: %s", *req.Handler))
+		return
 	}
+
+	if req.Handler == nil {
+		timod.WriteEx(
+			pkg.Pid,
+			timod.ExBadData,
+			"Missing handler")
+		return
+	}
+
+	if *req.Handler == "send-multicast-message" {
+		handleSendMulticastMessage(pkg)
+		return
+	}
+
+	if req.Handler == nil {
+		timod.WriteEx(
+			pkg.Pid,
+			timod.ExBadData,
+			"Missing handler")
+		return
+	}
+
+	timod.WriteEx(
+		pkg.Pid,
+		timod.ExBadData,
+		fmt.Sprintf("Unknown handler: %s", *req.Handler))
 
 }
 
