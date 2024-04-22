@@ -2,6 +2,10 @@
 
 Firebase module written using the [Go language](https://golang.org).
 
+Supported:
+
+- Firebase Cloud Messaging
+
 
 ## Installation
 
