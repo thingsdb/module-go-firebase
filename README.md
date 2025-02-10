@@ -15,7 +15,7 @@ Install the module by running the following command in the `@thingsdb` scope:
 new_module("firebase", "github.com/thingsdb/module-go-firebase");
 ```
 
-Optionally, you can choose a specific version by adding a `@` followed with the release tag. For example: `@v0.1.0`.
+Optionally, you can choose a specific version by adding a `@` followed with the release tag. For example: `@v1.0.0`.
 
 ## Configuration
 

@@ -1,6 +1,6 @@
 {
     "doc": "https://github.com/thingsdb/module-go-firebase#readme",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "main": {
         "linux/386": "bin/firebase_linux_386.bin",
         "linux/amd64": "bin/firebase_linux_amd64.bin",
