@@ -12,8 +12,8 @@ import (
 	"log"
 	"sync"
 
-	firebase "firebase.google.com/go"
-	"firebase.google.com/go/messaging"
+	firebase "firebase.google.com/go/v4"
+	"firebase.google.com/go/v4/messaging"
 	timod "github.com/thingsdb/go-timod"
 	"github.com/vmihailenco/msgpack"
 	"google.golang.org/api/option"
@@ -50,7 +50,7 @@ func handleConf(conf *firebaseConf) error {
 	defer mux.Unlock()
 
 	if conf.Credentials == nil {
-		return fmt.Errorf("Firebase credentials must not be empty")
+		return fmt.Errorf("firebase credentials must not be empty")
 	}
 
 	json, err := json.Marshal(conf.Credentials)
@@ -131,7 +131,7 @@ func handleSendMulticastMessage(pkg *timod.Pkg) {
 		Tokens: req.Tokens,
 	}
 
-	br, err := client.SendMulticast(context.Background(), message)
+	br, err := client.SendEachForMulticast(context.Background(), message)
 	if err != nil {
 		timod.WriteEx(
 			pkg.Pid,
