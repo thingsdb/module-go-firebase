@@ -88,13 +88,21 @@ func handleSendMessage(pkg *timod.Pkg) {
 		return
 	}
 
-	message := &messaging.Message{
-		Notification: &messaging.Notification{
-			Title: req.Title,
-			Body:  req.Body,
-		},
-		Data:  req.Data,
-		Token: req.Token,
+	var message *messaging.Message
+	if req.Title != "" && req.Body != "" {
+		message = &messaging.Message{
+			Notification: &messaging.Notification{
+				Title: req.Title,
+				Body:  req.Body,
+			},
+			Data:  req.Data,
+			Token: req.Token,
+		}
+	} else {
+		message = &messaging.Message{
+			Data:  req.Data,
+			Token: req.Token,
+		}
 	}
 
 	// Send a message to the device corresponding to the provided
@@ -122,13 +130,21 @@ func handleSendMulticastMessage(pkg *timod.Pkg) {
 		return
 	}
 
-	message := &messaging.MulticastMessage{
-		Notification: &messaging.Notification{
-			Title: req.Title,
-			Body:  req.Body,
-		},
-		Data:   req.Data,
-		Tokens: req.Tokens,
+	var message *messaging.MulticastMessage
+	if req.Title != "" && req.Body != "" {
+		message = &messaging.MulticastMessage{
+			Notification: &messaging.Notification{
+				Title: req.Title,
+				Body:  req.Body,
+			},
+			Data:   req.Data,
+			Tokens: req.Tokens,
+		}
+	} else {
+		message = &messaging.MulticastMessage{
+			Data:   req.Data,
+			Tokens: req.Tokens,
+		}
 	}
 
 	br, err := client.SendEachForMulticast(context.Background(), message)
